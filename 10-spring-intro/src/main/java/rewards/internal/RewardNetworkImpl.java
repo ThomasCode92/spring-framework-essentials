@@ -15,8 +15,6 @@ import rewards.internal.reward.RewardRepository;
  * <p>
  * Said in other words, this class implements the "reward account for dining" use case.
  * <p>
- * TODO-04: Review RewardNetwork interface and RewardNetworkImpl class below
- * TODO-05: Review the RewardNetworkImpl configuration logic (Refer to the lab document)
  * TODO-06: Review sequence diagram (Refer to the lab document)
  */
 public class RewardNetworkImpl implements RewardNetwork {
