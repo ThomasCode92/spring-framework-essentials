@@ -1,9 +1,13 @@
 package rewards.internal;
 
+import common.money.MonetaryAmount;
+import rewards.AccountContribution;
 import rewards.Dining;
 import rewards.RewardConfirmation;
 import rewards.RewardNetwork;
+import rewards.internal.account.Account;
 import rewards.internal.account.AccountRepository;
+import rewards.internal.restaurant.Restaurant;
 import rewards.internal.restaurant.RestaurantRepository;
 import rewards.internal.reward.RewardRepository;
 
@@ -14,8 +18,6 @@ import rewards.internal.reward.RewardRepository;
  * the domain-layer to carry out the process of rewarding benefits to accounts for dining.
  * <p>
  * Said in other words, this class implements the "reward account for dining" use case.
- * <p>
- * TODO-06: Review sequence diagram (Refer to the lab document)
  */
 public class RewardNetworkImpl implements RewardNetwork {
 
@@ -40,9 +42,13 @@ public class RewardNetworkImpl implements RewardNetwork {
     }
 
     public RewardConfirmation rewardAccountFor(Dining dining) {
-        // TODO-07: Write code here for rewarding an account according to
-        //          the sequence diagram in the lab document
-        // TODO-08: Return the corresponding reward confirmation
-        return null;
+        Account account = accountRepository.findByCreditCard(dining.getCreditCardNumber());
+        Restaurant restaurant = restaurantRepository.findByMerchantNumber(dining.getMerchantNumber());
+
+        MonetaryAmount amount = restaurant.calculateBenefitFor(account, dining);
+        AccountContribution contribution = account.makeContribution(amount);
+        accountRepository.updateBeneficiaries(account);
+
+        return rewardRepository.confirmReward(contribution, dining);
     }
 }
